@@ -1,7 +1,7 @@
-<% if memo.errors.any? %>
+<% if blog.errors.any? %>
   <div id="error_explanation">
     <ul style="margin: 0;">
-      <% memo.errors.full_messages.each do |message| %>
+      <% blog.errors.full_messages.each do |message| %>
         <%= content_tag :li, "error : #{message} !", style: "width: 300px; line-height: 30px; color: red; list-style: none; font-size: 20px" %>
       <% end %>
     </ul>

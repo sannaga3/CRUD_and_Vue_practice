@@ -2,34 +2,27 @@ class MemosController < ApplicationController
 
   def index
     @memos = Memo.order(id: :desc)
-    # ＠memo = Memo.new しない理由
-    # update でエラーが起きた後に create のフォームを送信した場合、既存インスタンスのupdateとして扱われてしまう。
-    # form_withでnewすると update の @memo と区別できる
   end
 
   def create
     @memo = Memo.new(params.require(:memo).permit(:content))
     @memos = Memo.order(id: :desc)
-    if @memo.save
-      redirect_to memos_path, notice: "Memo was successfully created."
-    else
-      render :index, status: :unprocessable_entity
-    end
+    redirect_to memos_path, notice: "新規メモ#{@memo.content}作成" and return if @memo.save
+    render :index, status: :unprocessable_entity
   end
 
   def update
     @memo = Memo.find(params[:id])
+    content = @memo.content
     @memos = Memo.order(id: :desc)
-    if @memo.update(params.require(:memo).permit(:content))
-      redirect_to memos_path, notice: "Memo was successfully updated."
-    else
-      render :index, status: :unprocessable_entity
-    end
+    redirect_to memos_path, notice: "#{content}から#{@memo.content}へ更新" and return if @memo.update(params.require(:memo).permit(:content))
+    render :index, status: :unprocessable_entity
   end
 
   def destroy
     @memo = Memo.find(params[:id])
+    content = @memo.content
     @memo.destroy
-    redirect_to memos_path, notice: "Memo was successfully destroyed."
+    redirect_to memos_path, notice: "#{content}を削除"
   end
 end

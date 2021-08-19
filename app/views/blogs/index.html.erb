@@ -1,6 +1,6 @@
-<h1>Memos</h1>
+<h1>Blogs</h1>
 
-<%= form_with(model: Memo.new, local: true) do |form| %>
+<%= form_with(model: Blog.new, local: true) do |form| %>
   <div class="d-flex flex-row align-items-center">
     <div class="d-flex flex-row">
       <div class="field", style="margin-right: 20px; padding-top: 5px;">
@@ -13,8 +13,8 @@
       </div>
     </div>
     <br>
-    <% if @memo && @memo.id == nil %>
-      <%= render 'error_message', memo: @memo%>
+    <% if @blog && @blog.id == nil %>
+      <%= render 'error_message', blog: @blog%>
     <% end %>
   </div>
 <% end %>
@@ -33,16 +33,16 @@
   </thead>
 
   <tbody>
-    <% @memos.each do |memo| %>
+    <% @blogs.each do |blog| %>
       <tr>
-        <td style="padding: 0 20px;"><%= memo.content %></td>
-        <%= form_with(model: memo, local: true, url: memo_path(memo.id), method: :patch) do |f| %>
-          <td><%= f.text_field :content, value: memo.content, style: "margin-right: 20px;" %></td>
+        <td style="padding: 0 20px;"><%= blog.content %></td>
+        <%= form_with(model: blog, local: true, url: blog_path(blog.id), method: :patch) do |f| %>
+          <td><%= f.text_field :content, value: blog.content, style: "margin-right: 20px;" %></td>
           <td><%= f.submit '更新', class: "btn btn-outline-secondary", style: "margin-right: 10px;" %></td>
-          <td><%= link_to '削除', memo, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-info" %></td>
+          <td><%= link_to '削除', blog, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-info" %></td>
           <td>
-            <% if @memo && @memo.id == memo.id %>
-              <%= render 'error_message', memo: @memo %>
+            <% if @blog && @blog.id == blog.id %>
+              <%= render 'error_message', blog: @blog %>
             <% end %>
           </td>
         <% end %>
@@ -53,4 +53,4 @@
 
 <br>
 
-<%= link_to "ブログへ", blogs_path, class: "btn btn-info" %>
+<%= link_to "メモへ", memos_path, class: "btn btn-info" %>
