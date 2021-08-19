@@ -1,54 +1,42 @@
 class MemosController < ApplicationController
-  before_action :set_memo, only: %i[ show edit update destroy ]
 
-  # GET /memos or /memos.json
   def index
-    @memos = Memo.all
+    @memos = Memo.order(id: :desc)
+    # ＠memo = Memo.new すると update でエラーが起きた後に create するとエラーが出たインスタンスのupdateとして扱われてしまう。
+    # form_withでnewすると update の @memo と区別できる
   end
 
-  # GET /memos/1 or /memos/1.json
-  def show
-  end
-
-  # GET /memos/new
-  def new
-    @memo = Memo.new
-  end
-
-  # GET /memos/1/edit
-  def edit
-  end
-
-  # POST /memos or /memos.json
   def create
     @memo = Memo.new(memo_params)
+    @memos = Memo.order(id: :desc)
 
     respond_to do |format|
       if @memo.save
-        format.html { redirect_to @memo, notice: "Memo was successfully created." }
+        format.html { redirect_to memos_path, notice: "Memo was successfully created." }
         format.json { render :show, status: :created, location: @memo }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :index, status: :unprocessable_entity }
         format.json { render json: @memo.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /memos/1 or /memos/1.json
   def update
+    @memo = Memo.find(params[:id])
+    @memos = Memo.order(id: :desc)
     respond_to do |format|
       if @memo.update(memo_params)
-        format.html { redirect_to @memo, notice: "Memo was successfully updated." }
-        format.json { render :show, status: :ok, location: @memo }
+        format.html { redirect_to memos_path, notice: "Memo was successfully updated." }
+        format.json { render :index, status: :ok, location: @memo }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render :index, status: :unprocessable_entity }
         format.json { render json: @memo.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /memos/1 or /memos/1.json
   def destroy
+    @memo = Memo.find(params[:id])
     @memo.destroy
     respond_to do |format|
       format.html { redirect_to memos_url, notice: "Memo was successfully destroyed." }
@@ -57,12 +45,6 @@ class MemosController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_memo
-      @memo = Memo.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
     def memo_params
       params.require(:memo).permit(:content)
     end
