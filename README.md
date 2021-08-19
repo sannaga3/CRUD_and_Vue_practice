@@ -1,24 +1,7 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+CRUD機能の集約とVue.jsの練習アプリ
 
-Things you may want to cover:
+・Memoリソース 同期通信で一覧・作成・編集・削除を1つのページに集約
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+・Blogリソース Memoリソースで行っていたことをvue.jsに置き換え

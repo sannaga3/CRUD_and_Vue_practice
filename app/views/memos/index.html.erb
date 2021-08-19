@@ -19,7 +19,9 @@
   </div>
 <% end %>
 
-<br><br>
+<br>
+<p id="notice" style="color: green; font-size: 20px;"><%= notice %></p>
+<br>
 
 <table>
   <thead>
@@ -33,7 +35,7 @@
   <tbody>
     <% @memos.each do |memo| %>
       <tr>
-        <td style="padding: 0 20px 0 20px;"><%= memo.content %></td>
+        <td style="padding: 0 20px;"><%= memo.content %></td>
         <%= form_with(model: memo, local: true, url: memo_path(memo.id), method: :patch) do |f| %>
           <td><%= f.text_field :content, value: memo.content, style: "margin-right: 20px;" %></td>
           <td><%= f.submit 'update', class: "btn btn-outline-secondary", style: "margin-right: 10px;" %></td>
