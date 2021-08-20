@@ -5,7 +5,7 @@
     <div class="d-flex flex-row">
       <div class="field", style="margin-right: 20px; padding-top: 5px;">
         <%= form.label :content %>
-        <%= form.text_field :content %>
+        <%= form.text_field :content, "v-model": "content" %>
       </div>
 
       <div class="actions">
@@ -54,3 +54,7 @@
 <br>
 
 <%= link_to "メモへ", memos_path, class: "btn btn-info" %>
+
+<div id="form">
+  {{ message }}
+</div>
