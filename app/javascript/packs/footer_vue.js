@@ -1,9 +1,9 @@
 import Vue from 'vue/dist/vue.esm.js'
-import Header from '../header.vue'
+import Footer from '../footer.vue'
 
 document.addEventListener('turbolinks:load', () => {
   var app = new Vue({
-    el: '#header',
-    components: { 'header-component': Header }
+    el: '#footer',
+    components: { 'footer-component': Footer }
   })
 })
