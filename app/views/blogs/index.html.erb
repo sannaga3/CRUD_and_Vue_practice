@@ -1,60 +1,30 @@
 <h1>Blogs</h1>
 
-<%= form_with(model: Blog.new, local: true) do |form| %>
-  <div class="d-flex flex-row align-items-center">
-    <div class="d-flex flex-row">
-      <div class="field", style="margin-right: 20px; padding-top: 5px;">
-        <%= form.label :content %>
-        <%= form.text_field :content, "v-model": "content" %>
-      </div>
+<div id="blog_wrapper">
+  <%= form_with(model: Blog.new, remote: true, format: :json) do |form| %>
+    <div class="d-flex flex-row align-items-center">
+      <div class="d-flex flex-row">
+        <div class="field" style="margin-right: 20px; padding-top: 5px;">
+          <%= form.label :content %>
+          <%= form.text_field :content, "v-model": "content", "@submit": "onSubmit" %>
+        </div>
 
-      <div class="actions">
-        <%= form.submit "送信", class: "btn btn-info" %>
+        <div class="actions">
+          <%= form.submit "送信", class: "btn btn-info", "@click.prevent": "add_content()" %>
+        </div>
       </div>
+      <br>
     </div>
-    <br>
-    <% if @blog && @blog.id == nil %>
-      <%= render 'error_message', blog: @blog%>
-    <% end %>
+  <% end %>
+
+  <div class="d-flex flex-row" style="margin-bottom: 10px;">
+    <div style="width: 150px; padding: 0 20px 0 20px; font-weight: bold;">Content</div>
+    <div style="width: 150px; font-weight: bold;">edit_form</div>
   </div>
-<% end %>
-
+  
+  <blog-list v-for="content in contents.data" :key="blog.id" />
+</div>
 <br>
-<p id="notice" style="color: green; font-size: 20px;"><%= notice %></p>
-<br>
 
-<table>
-  <thead>
-    <tr>
-      <th style="padding: 0 20px 0 20px;">Content</th>
-      <th>edit_form</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @blogs.each do |blog| %>
-      <tr>
-        <td style="padding: 0 20px;"><%= blog.content %></td>
-        <%= form_with(model: blog, local: true, url: blog_path(blog.id), method: :patch) do |f| %>
-          <td><%= f.text_field :content, value: blog.content, style: "margin-right: 20px;" %></td>
-          <td><%= f.submit '更新', class: "btn btn-outline-secondary", style: "margin-right: 10px;" %></td>
-          <td><%= link_to '削除', blog, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-info" %></td>
-          <td>
-            <% if @blog && @blog.id == blog.id %>
-              <%= render 'error_message', blog: @blog %>
-            <% end %>
-          </td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
 
 <%= link_to "メモへ", memos_path, class: "btn btn-info" %>
-
-<div id="form">
-  {{ message }}
-</div>
