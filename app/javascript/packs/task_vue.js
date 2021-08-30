@@ -1,9 +1,9 @@
 import Vue from 'vue/dist/vue.esm.js'
-import Memo from '../memo.vue'
+import TaskList from '../task.vue'
 
 document.addEventListener('turbolinks:load', () => {
   var app = new Vue({
-    el: '#memo',
-    components: { 'memo-component': Memo }
+    el: '#app',
+    components: { 'task-component': TaskList }
   })
 })

@@ -6,7 +6,7 @@
       <div class="d-flex flex-row">
         <div class="field" style="margin-right: 20px; padding-top: 5px;">
           <%= form.label :content %>
-          <%= form.text_field :content, "v-model": "content", "@submit": "onSubmit" %>
+          <%= form.text_field :content, "v-model": "content", "@submit": "Submit" %>
         </div>
 
         <div class="actions">
@@ -14,17 +14,37 @@
         </div>
       </div>
       <br>
+      <% if @blog && @blog.id == nil %>
+        <%= render 'error_message', blog: @blog%>
+      <% end %>
     </div>
   <% end %>
+
+  <br>
+  <p id="notice" style="color: green; font-size: 20px;"><%= notice %></p>
+  <br>
 
   <div class="d-flex flex-row" style="margin-bottom: 10px;">
     <div style="width: 150px; padding: 0 20px 0 20px; font-weight: bold;">Content</div>
     <div style="width: 150px; font-weight: bold;">edit_form</div>
   </div>
-  
-  <blog-list v-for="content in contents.data" :key="blog.id" />
+
+  <div>
+    <% @blogs.each do |blog| %>
+      <div class="d-flex flex-row">
+        <div style="width: 150px; padding: 5px 20px 0 20px;"><%= blog.content %></div>
+        <%= form_with(model: blog, remote: true, url: blog_path(blog.id), method: :patch) do |f| %>
+          <%= f.text_field :content, value: blog.content, style: "width: 150px; margin-right: 20px;" %>
+          <%= f.submit '更新', class: "btn btn-outline-secondary", style: "margin-right: 10px;" %>
+          <%= link_to '削除', blog, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-info" %>
+          <% if @blog && @blog.id == blog.id %>
+            <%= render 'error_message', blog: @blog %>
+          <% end %>
+        <% end %>
+      </div>
+      <br>
+    <% end %>
+  </div>
+  <blog-list v-for="content in contents" :key="content.id" v-vind:content="content" />
 </div>
 <br>
-
-
-<%= link_to "メモへ", memos_path, class: "btn btn-info" %>
