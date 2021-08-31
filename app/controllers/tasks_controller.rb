@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  after_action :set_csrf_token_header, only: %i[ update ]
   before_action :set_task, only: %i[ edit update destroy ]
 
   def index
@@ -11,11 +12,9 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    @task.to_json
-    @tasks = Task.all.to_json
     respond_to do |format|
-      if @task.save
-        format.json { render :index, status: :created, location: @tasks  }
+      if @task.save!
+        format.json { render index: @task, status: :created}
       else
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
@@ -23,10 +22,13 @@ class TasksController < ApplicationController
   end
 
   def update
-    @tasks = Task.all.to_json
+    id = params[:id]
+    title = params[:title]
+    params = {id: id,task: {title: title}}
+    # binding.irb
     respond_to do |format|
       if @task.update(task_params)
-        format.json { render index: @tasks, status: :created }
+        format.json { render index: @task, status: :created }
       else
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
@@ -35,9 +37,7 @@ class TasksController < ApplicationController
 
   def destroy
     @task.destroy
-    respond_to do |format|
-      format.json { head :no_content }
-    end
+    render :index
   end
 
   private

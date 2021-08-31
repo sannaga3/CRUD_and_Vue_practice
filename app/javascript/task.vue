@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="d-flex flex-row">
-      <form action="/tasks.json" accept-charset="UTF-8" data-remote="true" method="post">
-        <input placeholder="create task" v-model="title" @submit="addTask"></input>
-        <input @click.prevent="addTask" type="submit" class="btn btn-info"></input>
+      <form @submit.prevent="addTask">
+        <input placeholder="create task" v-model="title"></input>
+        <button type="submit" class="btn btn-info">送信</button>
       </form>
     </div>
     <div>
@@ -12,12 +12,12 @@
         <div class="mx-1" style="width: 228px; text-align: center;">delete_button</div>
       </div>
     </div>
-    <div v-for="(task, index) in tasks" :key="title.id">
+    <div v-for="(task, index) in tasks" :key="task.id">
       <div class="d-flex flex-row">
         <div class="mx-3 pt-2" style="min-width: 100px;">{{ task.title }}</div>
-        <form>
+        <form @submit.prevent="updateTask(task.id, task.title)">
           <input placeholder="update task" :value="task.title"></input>
-          <button @click.prevent="updateTask(task.id, task.title)" class="btn btn-info">更新</button>
+          <button type="submit" class="btn btn-info">更新</button>
         </form>
         <div class="mx-1" style="width: 228px; text-align: center;"><button style="margin-left: 30px;" @click="removeTask(task.id)" class="btn btn-danger">削除</button></div>
       </div>
@@ -27,6 +27,10 @@
 
 <script>
 import axios from 'axios';
+axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+}
 const client = axios.create({
   baseURL: `http://localhost:3000`,
   headers: {
@@ -37,9 +41,8 @@ const client = axios.create({
 export default {
   data: function () {
     return {
-      title: "",
-      task: "",
-      tasks: []
+      tasks: [],
+      title: ""
     }
   },
   mounted() {
@@ -57,8 +60,7 @@ export default {
         })
     },
     addTask() {
-      console.log(this.title)
-      client.post('/tasks', { task: { title: this.title }})
+      client.post('/tasks.json', { task: { title: this.title }})
         .then((res) => {
           this.tasks.unshift(res.data)
           console.log(this.tasks)
@@ -66,16 +68,17 @@ export default {
         })
     },
     updateTask(id, title) {
-      client.put(('/tasks/' + id ), { title: title } )
+      client.patch('/tasks/' + id,  { title: title })
         .then((res) => {
           console.log(res.data)
         })
     },
     removeTask(id) {
-    client.delete(`/tasks/${id}`)
-      .then((res) => {
-        this.getTasks()
-      })
+      client.delete('/tasks/' + id)
+        .then((res) => {
+          this.tasks = []
+          this.getTasks()
+        })
     }
   }
 }
