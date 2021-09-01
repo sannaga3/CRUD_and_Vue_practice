@@ -15,7 +15,7 @@ class MemosController < ApplicationController
     @memo = Memo.find(params[:id])
     content = @memo.content
     @memos = Memo.order(id: :desc)
-    redirect_to memos_path, notice: "#{content}から#{@memo.content}へ更新" and return if @memo.update(params.require(:memo).permit(:content))
+    redirect_to memos_path, notice: "#{content}から#{@memo.content}へ更新" and return if @memo.update(params.require(:memo).permit(:id, :content))
     render :index, status: :unprocessable_entity
   end
 
