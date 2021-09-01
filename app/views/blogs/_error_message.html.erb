@@ -1,9 +1,0 @@
-<% if blog.errors.any? %>
-  <div id="error_explanation">
-    <ul style="margin: 0;">
-      <% blog.errors.full_messages.each do |message| %>
-        <%= content_tag :li, "error : #{message} !", style: "width: 300px; line-height: 30px; color: red; list-style: none; font-size: 20px" %>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
