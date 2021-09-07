@@ -1,11 +1,13 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
+  skip_before_action :login_required, only: [:new, :create]
 
   def index
     @users = User.all
   end
 
   def show
+    binding.irb
   end
 
   def new
@@ -17,7 +19,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-
+    session[:user_id] = user.id
     respond_to do |format|
       if @user.save
         format.html { redirect_to @user, notice: "User was successfully created." }

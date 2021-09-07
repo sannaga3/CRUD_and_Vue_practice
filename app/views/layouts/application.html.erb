@@ -12,6 +12,9 @@
 
   <body>
     <div id="header"><header-component></header-component></div>
+    <% flash.each do |key, value| %>
+      <%= content_tag(:div, value, class: "#{key}") %>
+    <% end %>
     <%= yield %>
     <div id="footer"><footer-component></footer-component></div>
     <%= javascript_pack_tag 'header_vue' %>
